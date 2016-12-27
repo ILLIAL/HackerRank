@@ -1,0 +1,35 @@
+// Fibonacci Modified task: https://www.hackerrank.com/challenges/fibonacci-modified
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
+class Solution {
+    public static BigInteger Fibo(BigInteger f0, BigInteger f1, int n)
+        {
+            BigInteger fn=new BigInteger(0);
+            if (n == 1) return f0;
+            if (n == 2) return f1;
+            else
+            {
+                BigInteger temp = new BigInteger(0);
+                BigInteger temp2 = new BigInteger(0);
+                for (int i = 2; i < n; i++)
+                {
+                    fn = f0 + f1 * f1;
+                    f0 = f1;
+                    f1 = fn;
+                }
+                return fn;
+                }         
+        }
+        static void Main(String[] args)
+        {
+            string[] tokens_n = Console.ReadLine().Split(' ');
+            int[] x = Array.ConvertAll(tokens_n, Int32.Parse);
+            BigInteger f0 = new BigInteger(x[0]);
+            BigInteger f1 = new BigInteger(x[1]);
+            int n = x[2];
+            Console.WriteLine(Fibo(f0, f1, n));
+
+        }
+}
