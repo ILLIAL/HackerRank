@@ -1,0 +1,102 @@
+//// Even Tree task: https://www.hackerrank.com/challenges/even-tree
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EvenTreegAlgorithm
+{
+    class g
+    {
+        private int V;
+        private List<Tuple<int, int>>[] edges;
+        private Dictionary<int, List<int>> vertIndex;
+
+        public g(int V)
+        {
+            this.V = V;
+            edges = new List<Tuple<int, int>>[V + 1];
+
+            vertIndex = new Dictionary<int, List<int>>();
+            for (int i = 0; i < V + 1; i++)
+            {
+                edges[i] = new List<Tuple<int, int>>();
+                vertIndex[i] = new List<int>();
+            }
+        }
+
+        public void addEdge(int v, int w)
+        {
+            edges[v].Add(new Tuple<int, int>(v, w));
+            vertIndex[v].Add(w);
+            vertIndex[w].Add(v);
+        }
+
+        public int NotRemovableNumber()
+        {
+            int count = 0;
+            for (int i = 1; i <= V; i++)  
+            {
+                List<Tuple<int, int>> list = edges[i];
+
+                for (int j = 0; j < list.Count; j++)
+                {
+                    HashSet<int> t = new HashSet<int>();
+                    Queue<int> queue = new Queue<int>();
+
+                    int cur = list[j].Item1;
+                    int next = list[j].Item2;
+
+                    t.Add(i);
+                    t.Add(next);
+
+                    queue.Enqueue(next);
+                    while (queue.Count > 0)
+                    {
+                        int first = queue.Dequeue();
+
+                        foreach (int connect in vertIndex[first])
+                        {
+                            if (!t.Contains(connect))
+                            {
+                                t.Add(connect);
+                                queue.Enqueue(connect);
+                            }
+                        }
+                    }
+
+                    if ((t.Count % 2) == 1)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] s = Console.ReadLine().Split(' ');
+            int vert = Convert.ToInt32(s[0]);
+            int edg = Convert.ToInt32(s[1]);
+
+            g g = new g(vert);
+            for (int i = 0; i < edg; i++)
+            {
+                string[] s1 = Console.ReadLine().Split(' ');
+
+                int begin = Convert.ToInt32(s1[0]);
+                int end = Convert.ToInt32(s1[1]);
+
+                g.addEdge(begin, end);
+            }
+
+            Console.WriteLine(g.NotRemovableNumber());
+        }
+    }
+}
