@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+class Solution {
+
+      public static bool isOpenBracket(char x)
+        {
+            if (x == '(' || x == '[' || x == '{') return true;
+            return false;
+        }
+        public static bool isCloseBracket(char x)
+        {
+            if (x == ')' || x == ']' || x == '}') return true;
+            return false;
+        }
+
+        public static bool matchOpenClose(char x, char y)
+        {
+            if ((x == '(' && y == ')') || (x == '[' && y == ']') || (x == '{' && y == '}')) return true;
+            return false;
+        }
+        public static string Brackets(string S)
+        {
+            Stack<char> St = new Stack<char>();            
+            int NOpen = 0;
+            int NClose = 0;
+            string res="YES";
+            foreach (char elem in S)
+            {
+                bool o = isOpenBracket(elem);
+                bool c = isCloseBracket(elem);
+                if (!(o || c))
+                {
+                    res="NO";
+                   return res; 
+                } 
+                if (o)
+                {
+                    St.Push(elem);
+                    NOpen++;
+                }
+                if (c)
+                {
+                    NClose++;
+                    if (!matchOpenClose(St.Pop(),elem))
+                    {
+                        res = "NO";
+                        return res;
+                    }
+                }
+            }
+            if (NOpen != NClose) res = "NO";
+            return res;
+        }
+    static void Main(String[] args) {
+        int t = Convert.ToInt32(Console.ReadLine());
+        for(int a0 = 0; a0 < t; a0++){
+            string s = Console.ReadLine();
+            Console.WriteLine(Brackets(s));
+        }
+    }
+}
